@@ -1,0 +1,65 @@
+React "primitive " Hooks
+
+useState see lecture 139
+	returns an array with exactly two elements we access it like so:
+	const [arg1, arg2] = useState(null);
+		arg1 is a reference to a value that is going to change over time (name, index, etc.)
+		arg2 is a function that we call (a setter function) that updates the piece of state. Causes component to re-render just like in class-based
+		argument for useState() - in this case null - is the value at which we want to initialize our state - initializes the value of arg1 (could be empty string, null, empty array, etc.)
+. Only used ONE time when we first render the component. The moment the setter function is called, the component is re-rendered automatically, and the value of arg1 changes to whatever our setter function makes it 
+const [name, setName] = useState('')
+const [counter, setCounter] = useState(0)
+const [color, setColor] = useState('green')
+
+
+useEffect - use this to detect when a component has rerendered AND a piece of state has changed (in Search.js) see lecture 150
+	allows function components to use something LIKE lifecycle methods - similar but not the same
+	We configure the hook to run some code automatically in one of three scenarios
+		1) when component is rendered for the first time only - use [] for arg2
+		2) when component is rendered for the first time AND whenever it rerenders - no arg2
+		3) when component is rendered for the first time AND whenever it rerenders AND some piece of data has changed - use array with value inside as arg2
+
+useEffect(() => {
+	
+}, [])
+arg1 is a function
+arg2 can be an empty array, a populated array, or nothing. if it is a populated array, the arrow function will run if ANY of the array items change - doesn't have to all of them
+
+** cannot be used with async await syntax directly see lecture 152
+three methods to overcome this:
+1)
+useEffect(() => {
+		const search = async () => {
+				await axios.get('a')
+			};
+
+		search();
+	}, [term]);
+
+2) JavaScript syntax around async function declares an anonymous async function and calls it immediately (wrap in parentheses, add function call parentheses right after). No performance benefit to this because declaring a variable is miniscule performance wise
+useEffect(() => {
+		(async () => {
+			await axios.get('a')
+		})();
+	}, [term]);
+
+3) Use traditional .then() method
+useEffect(() => {
+		axios.get('asdf')
+		.then(res => {
+			console.log(res.data);
+		});
+	}, [term]);
+
+	we can also add a cleanup function to the end by returning a function. This will be called when the component is being removed from the DOM (see Dropdown.js)
+
+
+
+useContext
+useReducer
+useCallback
+useMemo
+useRef
+UseImperativeHandle
+useLayoutEffect
+useDebugValue
